@@ -1,5 +1,7 @@
 import React from 'react';
 import './SignUp.css';
+import { Button, Snackbar, TextField, Alert } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 // import axios from 'axios';
 
 class SignUp extends React.Component {
@@ -10,7 +12,8 @@ class SignUp extends React.Component {
       password: "monPassw0rd",
       name: "James",
       lastname: "Bond",
-      flash: ""
+      flash: "",
+      openSnackbar: false
     }
   }
 
@@ -21,7 +24,7 @@ class SignUp extends React.Component {
   }
 
   handleSubmit = (event) => {
-    const { flash, ...user } = this.state;
+    const { flash, openSnackbar, ...user } = this.state;
     event.preventDefault();
     console.log(user);
     
@@ -37,28 +40,44 @@ class SignUp extends React.Component {
     .then(
       res => this.setState({flash: res.flash}),
       err => this.setState({flash: err.flash}),
+    ).then(
+      this.setState({ openSnackbar: true })
     )
   }
 
+  handleCloseSnackbar = () => {
+    this.setState({ openSnackbar: false });
+  };
+
   render() {
     const titleJSON = JSON.stringify(this.state);
-
+    const { flash, openSnackbar } = this.state;
+    console.log("snack", openSnackbar);
     return(
       <div className="SignUp">
-        <h3>{titleJSON}</h3>
-        <div>
+        <h3>Sign up!</h3>
+        <div className="form-section">
           <form onSubmit={this.handleSubmit}>
-            <div>Name</div>
-            <input type="text" name="name" onChange={this.updateFields}/>
-            <div>Lastname</div>
-            <input type="text" name="lastname" onChange={this.updateFields}/><br/>
             <div>Email</div>
-            <input type="email" name="email" onChange={this.updateFields}/>
+            <TextField type="email" name="email" onChange={this.updateFields} fullWidth required/>
             <div>Password</div>
-            <input type="password" name="password" onChange={this.updateFields}/>
+            <TextField type="password" name="password" onChange={this.updateFields} required/>
             <div>Password Confirmation</div>
-            <input type="password" name="passwordconf"/><br/>
-            <input type="submit" value="Submit"/>
+            <TextField type="password" name="passwordconf" required/>
+            <div>Name</div>
+            <TextField type="text" name="name" onChange={this.updateFields} required/>
+            <div>Lastname</div>
+            <TextField type="text" name="lastname" onChange={this.updateFields} required/>
+            <div className="button-section">
+              <Button variant="contained" color="primary" onClick={this.handleSubmit}>Submit</Button>
+            </div>
+            <Snackbar
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              open={openSnackbar}
+              onClose={this.handleCloseSnackbar}
+              message={flash}
+            >
+            </Snackbar>
           </form>
         </div>
       </div>
