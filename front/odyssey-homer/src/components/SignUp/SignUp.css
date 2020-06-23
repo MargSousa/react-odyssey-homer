@@ -1,5 +1,14 @@
 .SignUp {
   display: flex;
   flex-wrap: wrap;
+  flex-direction:column;
   width: 100%;
+}
+
+form input {
+  margin-bottom: 10px;
+}
+
+form div {
+  margin-bottom: 5px;
 }

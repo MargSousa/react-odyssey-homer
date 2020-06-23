@@ -1,5 +1,6 @@
 import React from 'react';
-import './SignUp.css'
+import './SignUp.css';
+// import axios from 'axios';
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -8,7 +9,8 @@ class SignUp extends React.Component {
       email: "mon@email.com",
       password: "monPassw0rd",
       name: "James",
-      lastname: "Bond"
+      lastname: "Bond",
+      flash: ""
     }
   }
 
@@ -19,8 +21,23 @@ class SignUp extends React.Component {
   }
 
   handleSubmit = (event) => {
+    const { flash, ...user } = this.state;
     event.preventDefault();
-    console.log(this.state);
+    console.log(user);
+    
+    fetch('/auth/signup',
+    {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify(user),
+    })
+    .then(res => res.json())
+    .then(
+      res => this.setState({flash: res.flash}),
+      err => this.setState({flash: err.flash}),
+    )
   }
 
   render() {
@@ -28,15 +45,22 @@ class SignUp extends React.Component {
 
     return(
       <div className="SignUp">
-        <h1>{titleJSON}</h1>
-        <form onSubmit={this.handleSubmit}>
-          <input type="email" name="email" onChange={this.updateFields}/>
-          <input type="password" name="password" onChange={this.updateFields}/>
-          <input type="password" name="passwordconf" onChange={this.updateFields}/>
-          <input type="text" name="name" onChange={this.updateFields}/>
-          <input type="text" name="lastname" onChange={this.updateFields}/>
-          <input type="submit" value="Submit"/>
-        </form>
+        <h3>{titleJSON}</h3>
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <div>Name</div>
+            <input type="text" name="name" onChange={this.updateFields}/>
+            <div>Lastname</div>
+            <input type="text" name="lastname" onChange={this.updateFields}/><br/>
+            <div>Email</div>
+            <input type="email" name="email" onChange={this.updateFields}/>
+            <div>Password</div>
+            <input type="password" name="password" onChange={this.updateFields}/>
+            <div>Password Confirmation</div>
+            <input type="password" name="passwordconf"/><br/>
+            <input type="submit" value="Submit"/>
+          </form>
+        </div>
       </div>
     );
   }
