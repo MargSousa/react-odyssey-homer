@@ -1,0 +1,10 @@
+.signup-section {
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.signup-section a {
+  text-decoration: none;
+}
