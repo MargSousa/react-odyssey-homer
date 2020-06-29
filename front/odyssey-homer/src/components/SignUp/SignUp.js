@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Snackbar, TextField } from '@material-ui/core';
+import { Button, Snackbar, TextField, IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import { Link } from "react-router-dom";
 import './SignUp.css';
 
@@ -40,13 +41,13 @@ class SignUp extends React.Component {
       res => this.setState({flash: res.flash}),
       err => this.setState({flash: err.flash}),
     ).then(
-      this.setState({ openSnackbar: true }),
-      this.props.history.push({pathname: '/'})
+      this.setState({ openSnackbar: true })
     )
   }
 
   handleCloseSnackbar = () => {
     this.setState({ openSnackbar: false });
+    this.props.history.push({pathname: '/'});
   };
 
   render() {
@@ -77,12 +78,35 @@ class SignUp extends React.Component {
               <Button variant="contained" color="primary" onClick={this.handleSubmit}>Submit</Button>
             </div>
             <Snackbar
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-              open={openSnackbar}
-              onClose={this.handleCloseSnackbar}
-              message={flash}
-            >
-            </Snackbar>
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={this.handleCloseSnackbar}
+            message={flash}
+            action={
+              <React.Fragment>
+                <Button
+                  className="button"
+                  color="secondary"
+                  size="small"
+                  onClick={this.handleClose}
+                >
+                  UNDO
+                </Button>
+                <IconButton
+                  size="small"
+                  aria-label="close"
+                  color="inherit"
+                  onClick={this.handleCloseSnackbar}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </React.Fragment>
+            }
+          />
           </form>
         </div>
       </div>
