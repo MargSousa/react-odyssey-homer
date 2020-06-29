@@ -22,7 +22,7 @@ class SignIn extends React.Component {
   handleSubmit = (event) => {
     const { flash, ...user } = this.state;
     event.preventDefault();
-    console.log(user);
+    console.log("signin", user);
     
     fetch('/auth/signin',
     {
@@ -32,11 +32,10 @@ class SignIn extends React.Component {
       }),
       body: JSON.stringify(user),
     })
-    .then(res => res.json())
-    .then(
-      res => this.setState({flash: res.flash}),
-      err => this.setState({flash: err.flash}),
-    )
+    .then(res => {
+      console.log("hello", res);
+      this.props.history.push({pathname: '/profile'});
+    })
   }
 
   render() {
@@ -56,9 +55,7 @@ class SignIn extends React.Component {
             <div>Password</div>
             <TextField type="password" name="password" onChange={this.updateFields} required/>
             <div className="button-section">
-              <Link to="/profile">
-                <Button variant="contained" color="primary">Sign In</Button>
-              </Link>
+              <Button variant="contained" color="primary" onClick={this.handleSubmit}>Sign In</Button>
             </div>
           </form>
         </div>
