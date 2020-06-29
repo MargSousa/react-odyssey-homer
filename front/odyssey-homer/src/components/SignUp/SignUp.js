@@ -26,7 +26,7 @@ class SignUp extends React.Component {
   handleSubmit = (event) => {
     const { flash, openSnackbar, ...user } = this.state;
     event.preventDefault();
-    console.log(user);
+    console.log("signup", user);
     
     fetch('/auth/signup',
     {
@@ -85,17 +85,9 @@ class SignUp extends React.Component {
             open={openSnackbar}
             autoHideDuration={6000}
             onClose={this.handleCloseSnackbar}
-            message={flash}
+            message={flash ? flash : 'Something went worng, please try again later.'}
             action={
               <React.Fragment>
-                <Button
-                  className="button"
-                  color="secondary"
-                  size="small"
-                  onClick={this.handleClose}
-                >
-                  UNDO
-                </Button>
                 <IconButton
                   size="small"
                   aria-label="close"

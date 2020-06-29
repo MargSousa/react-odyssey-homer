@@ -7,6 +7,13 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
 const authRouter = require('./routes/auth/auth');
+const connection = require('./helpers/db');
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const JWTStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+
 
 // set up the application
 app.use(morgan('dev'));
@@ -16,6 +23,42 @@ app.use(express.static(__dirname  +  '/public'));
 
 // Routers
 app.use('/auth', authRouter);
+app.get('/profile', passport.authenticate('jwt', { session:  false }), function (req, res) {
+  res.send(req.user);
+});
+
+// 3 - Passport Setup
+passport.use(new LocalStrategy(
+  {
+      usernameField: 'email',
+      passwordField: 'password',
+      session: false
+  },
+  function (email, password, cb) {
+    connection.query('select * from users where email = ?', [email], (err, results) => {
+      console.log("results", results);
+      if (err) return cb(err);
+      if(!results.length){ 
+        return cb(null, false, {message: 'Invalid Email'})
+      };
+      if (!bcrypt.compareSync(password, results[0].password)){
+        return cb(null, false, {message: 'Invalid Password'})
+      } else {
+        return cb(null, results[0])
+      }
+    })   
+  })
+);
+
+// 5 -  Jane and Tarzan
+passport.use(new JWTStrategy({
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey   : 'your_jwt_secret'
+},
+function (jwtPayload, cb) {
+  return cb(null, jwtPayload);
+}
+));
 
 // implement the API part
 app.get("/", (req,res) => {
