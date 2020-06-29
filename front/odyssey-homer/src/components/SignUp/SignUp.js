@@ -1,8 +1,7 @@
 import React from 'react';
+import { Button, Snackbar, TextField } from '@material-ui/core';
+import { Link } from "react-router-dom";
 import './SignUp.css';
-import { Button, Snackbar, TextField, Alert } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-// import axios from 'axios';
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -41,7 +40,8 @@ class SignUp extends React.Component {
       res => this.setState({flash: res.flash}),
       err => this.setState({flash: err.flash}),
     ).then(
-      this.setState({ openSnackbar: true })
+      this.setState({ openSnackbar: true }),
+      this.props.history.push({pathname: '/'})
     )
   }
 
@@ -50,11 +50,16 @@ class SignUp extends React.Component {
   };
 
   render() {
-    const titleJSON = JSON.stringify(this.state);
+    // const titleJSON = JSON.stringify(this.state);
     const { flash, openSnackbar } = this.state;
-    console.log("snack", openSnackbar);
+    
     return(
       <div className="SignUp">
+        <div className="signup-section">
+          <Link to="/signin">
+            <Button variant="contained" color="secondary" size="small">Sign In</Button>
+          </Link>
+        </div>
         <h3>Sign up!</h3>
         <div className="form-section">
           <form onSubmit={this.handleSubmit}>

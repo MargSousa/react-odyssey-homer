@@ -35,7 +35,10 @@ form div {
 
 .button-section {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin: 30px 0px;
 }
 
+.button-section a {
+  text-decoration: none;
+}
