@@ -22,14 +22,8 @@ class Profile extends React.Component {
          'Authorization': 'Bearer ' + this.props.token,
         }
       })
-    .then(res => {
-      if (res.ok)
-        return res.json()
-      else
-        throw new Error(res.statusText)
-    })
+    .then(res => res.json())
     .then(res => {this.setState({ profile: res })})
-    .catch()
   }
 
   getSignOut = () => {

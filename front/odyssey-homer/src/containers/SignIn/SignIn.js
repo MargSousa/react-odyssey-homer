@@ -12,7 +12,8 @@ class SignIn extends React.Component {
       email: "mon@email.com",
       password: "monPassw0rd",
       flash: "",
-      openSnackbar: false
+      openSnackbar: false,
+      signIn: false
     }
   }
 
@@ -23,7 +24,7 @@ class SignIn extends React.Component {
   }
 
   handleSubmit = (event) => {
-    const { flash, openSnackbar, ...user} = this.state;
+    const { flash, openSnackbar, signIn, ...user} = this.state;
     event.preventDefault();
     console.log("signin", user);
     
@@ -52,9 +53,12 @@ class SignIn extends React.Component {
           message : res.message
         }
       );
-      this.setState({ flash: this.props.flash });
+      this.setState({ flash: this.props.flash, signIn: true });
     })
-    .catch(err => this.setState({ flash: err.message }))
+    .catch(err => {
+      // this.setState({ flash: err.message })
+      this.setState({ flash: "The email address or password is incorrect, please try again." })
+    })
     .then(
       this.setState({ openSnackbar: true })
     )
@@ -62,8 +66,8 @@ class SignIn extends React.Component {
 
   handleCloseSnackbar = () => {
     this.setState({ openSnackbar: false });
-    this.props.history.push({pathname: '/profile'});
-    // this.props.history.replace("/");
+    // this.props.history.push({pathname: '/profile'});
+    this.props.history.push({pathname: '/'}); // = this.props.history.replace("/");
   };
 
   render() {

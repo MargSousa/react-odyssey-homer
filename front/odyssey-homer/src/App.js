@@ -22,8 +22,8 @@ function App() {
                 <Grid item xs={12} sm={6} alignContent="center">
                   <BrowserRouter>
                     <Switch>
-                      {/* <Redirect exact from='/' to='/profile' /> */}
-                      <Route exact path="/" component={SignIn} />
+                      {/* <Route exact path="/" component={SignIn} /> */}
+                      <Redirect exact from='/' to='/profile' />
                       <Route exact path="/profile" component={requireAuth(Profile)} />
                       <Route exact path="/signin" component={requireNotAuth(SignIn)} />
                       <Route exact path="/signup" component={requireNotAuth(SignUp)} />
