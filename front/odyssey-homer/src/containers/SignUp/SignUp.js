@@ -51,7 +51,6 @@ class SignUp extends React.Component {
   };
 
   render() {
-    // const titleJSON = JSON.stringify(this.state);
     const { flash, openSnackbar } = this.state;
     
     return(
@@ -85,7 +84,7 @@ class SignUp extends React.Component {
             open={openSnackbar}
             autoHideDuration={6000}
             onClose={this.handleCloseSnackbar}
-            message={flash ? flash : 'Something went worng, please try again later.'}
+            message={flash ? flash : 'Something went wrong, please try again later.'}
             action={
               <React.Fragment>
                 <IconButton

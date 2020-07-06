@@ -1,6 +1,6 @@
 import React from 'react';
+import { connect } from  'react-redux';
 import { List, ListItem, ListItemText, Button } from '@material-ui/core';
-import { Link } from "react-router-dom";
 
 class Profile extends React.Component {
   constructor(props) {
@@ -12,6 +12,24 @@ class Profile extends React.Component {
         lastname:  "Simpson"
       }
     }
+  }
+
+  componentDidMount = () => {
+    console.log("profile");
+    fetch('/profile',
+      {
+        headers: {
+         'Authorization': 'Bearer ' + this.props.token,
+        }
+      })
+    .then(res => res.json())
+    .then(res => {this.setState({ profile: res })})
+  }
+
+  getSignOut = () => {
+    console.log("sign out");
+    //this.props.dispatch({ type: "" });
+    this.props.history.push({pathname: '/signin'});
   }
 
   render() {
@@ -31,13 +49,17 @@ class Profile extends React.Component {
           </ListItem>
         </List>
         <div className="button-section">
-          <Link to="/signin">
-            <Button variant="contained" color="primary" onClick={this.handleSubmit}>Sign Out</Button>
-          </Link>
+          <Button variant="contained" color="primary" onClick={this.getSignOut}>Sign Out</Button>
         </div>
       </div>
     );
   }
 }
 
-export default Profile;
+function  mapStateToProps(state) {
+  return {
+    token: state.auth.token,
+  }
+};
+
+export default connect(mapStateToProps)(Profile);
